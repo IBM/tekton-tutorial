@@ -3,7 +3,7 @@
 Tekton is an open source project to configure and run CI/CD pipelines within a Kubernetes cluster.
 
 
-## Objectives
+## Introduction
 
 In this tutorial you'll learn
 * what are the basic concepts used by Tekton pipelines
@@ -26,7 +26,15 @@ Before you start the tutorial you must set up a Kubernetes environment with Knat
 * [Install Tekton in your cluster by following the instructions](https://github.com/tektoncd/pipeline/blob/master/docs/install.md#adding-the-tekton-pipelines)
 
 
-## Tekton pipeline concepts
+## Estimated time
+
+1 hour
+
+
+## Steps
+
+
+### 1. Tekton pipeline concepts
 
 Tekton provides a set of extensions to Kubernetes, in the form of [Custom Resources](https://kubernetes.io/docs/concepts/extend-kubernetes/api-extension/custom-resources/), for defining pipelines.
 The following diagram shows the resources used in this tutorial.  The arrows depict references from one resource to another resource.
@@ -43,7 +51,7 @@ The resources are used as follows.
 We will go into more detail about each resource during the walkthrough of the example.
 
 
-## Sample pipeline
+### 2. Sample pipeline
 
 Let's create a simple pipeline that
 
@@ -61,7 +69,7 @@ then we'll define the Pipeline resource that references the tasks,
 and finally we'll create the PipelineRun and PipelineResource resources needed to run the pipeline.
 
 
-### Create a task to build an image and push it to a container registry
+#### Create a task to build an image and push it to a container registry
 
 Below is a Tekton task that builds a docker image and pushes it to a container registry.
 You can find this yaml file at [tekton/tasks/source-to-image.yaml](tekton/tasks/source-to-image.yaml).
@@ -125,7 +133,7 @@ kubectl apply -f tekton/tasks/source-to-image.yaml
 ```
 
 
-## Create a task to deploy an image to a Kubernetes cluster
+### 3. Create a task to deploy an image to a Kubernetes cluster
 
 Below is a Tekton task that deploys a docker image to a Kubernetes cluster.
 You can find this yaml file at [tekton/tasks/deploy-using-kubectl.yaml](tekton/tasks/deploy-using-kubectl.yaml).
@@ -185,7 +193,7 @@ kubectl apply -f tekton/tasks/deploy-using-kubectl.yaml
 ```
 
 
-## Create a pipeline
+### 4. Create a pipeline
 
 Below is a Tekton pipeline that runs the two tasks we defined above.
 You can find this yaml file at [tekton/pipeline/build-and-deploy-pipeline.yaml](tekton/pipeline/build-and-deploy-pipeline.yaml).
@@ -263,7 +271,7 @@ kubectl apply -f tekton/pipeline/build-and-deploy-pipeline.yaml
 ```
 
 
-## Create PipelineRun and PipelineResources
+### 5. Create PipelineRun and PipelineResources
 
 We've defined reusable Pipeline and Task resources for building and deploying an image.
 It is now time to look at how one runs the pipeline with an actual input resource and parameters.
@@ -345,7 +353,7 @@ kubectl apply -f tekton/pipeline/tekton/resources/picalc-git.yaml
 ```
 
 
-## Define a service account
+### 6. Define a service account
 
 The last step before running the pipeline is to set up a service account so that it can access protected resources.
 The service account ties together a couple of secrets containing credentials for authentication
@@ -434,7 +442,7 @@ kubectl apply -f tekton/pipeline-account.yaml
 ```
 
 
-## Run the pipeline
+### 7. Run the pipeline
 
 All the pieces are in place to run the pipeline.
 
@@ -577,7 +585,7 @@ build step "build-step-deploy-using-kubectl" exited with code 1 (image: "docker.
 ```
 
 
-## Tips
+### 8. Tips
 
 Be careful when defining a PipelineResource as output from one task and input to another task.
 For example, in this tutorial an [image PipelineResource](https://github.com/tektoncd/pipeline/blob/master/docs/resources.md#image-resource) could have been used
@@ -591,5 +599,8 @@ This functionality is not completely implemented at the point of this writing so
 Tekton provides simple, easy-to-learn features for constructing CI/CD pipelines that run on Kubernetes.
 This tutorial covered the basics to get you started building your own pipelines.
 There are more features available and many more planned for upcoming releases.
+
+
+## Related Links
 
 You can check out our other Knative-related tutorials and blogs at https://developer.ibm.com/components/knative/
