@@ -349,7 +349,7 @@ You can apply the PipelineResource file to your cluster now.
 Do not apply the PipelineRun file yet because we still need to define the service account for it.
 
 ```
-kubectl apply -f tekton/pipeline/tekton/resources/picalc-git.yaml
+kubectl apply -f tekton/resources/picalc-git.yaml
 ```
 
 
@@ -366,7 +366,7 @@ The process for creating a token or an API key is described [here](https://cloud
 After you have the token or API key, you can create the following secret.
 
 ```
-kubectl create secret generic ibm-cr-push-secret --type="kubernetes.io/basic-auth" --from-literal=username=<USER> --from-literal-password=<TOKEN/APIKEY>
+kubectl create secret generic ibm-cr-push-secret --type="kubernetes.io/basic-auth" --from-literal=username=<USER> --from-literal=password=<TOKEN/APIKEY>
 kubectl annotate secret ibm-cr-push-secret tekton.dev/docker-0=<REGISTRY>
 ```
 
@@ -554,13 +554,13 @@ Check the status of the deployed Knative service.  It should be ready.
 ```
 $ kubectl get ksvc picalc
 NAME      DOMAIN                                                          LATESTCREATED   LATESTREADY    READY     REASON
-picalc    picalc.default.mycluster6.us-south.containers.appdomain.cloud   picalc-00001    picalc-00001   True
+picalc    picalc-default.mycluster6.us-south.containers.appdomain.cloud   picalc-00001    picalc-00001   True
 ```
 
 You can use the URL in the response to curl the service.
 
 ```
-$ curl picalc.default.mycluster6.us-south.containers.appdomain.cloud?iterations=20000000
+$ curl picalc-default.mycluster6.us-south.containers.appdomain.cloud?iterations=20000000
 3.1415926036
 ```
 
