@@ -19,12 +19,13 @@ Before you start the tutorial you must set up a Kubernetes environment with Knat
 
 * [Create a standard Kubernetes cluster in IBM Kubernetes Service](https://cloud.ibm.com/docs/containers?topic=containers-clusters#clusters_ui_standard)
 
+    **Note**:  The managed Knative add-on requires Kubernetes version 1.16 or later.
+
 * [Create a private container registry in IBM Container Service](https://cloud.ibm.com/docs/services/Registry?topic=registry-registry_setup_cli_namespace#registry_setup_cli_namespace)
 
-* [Install Knative in your cluster](https://cloud.ibm.com/docs/containers?topic=containers-knative_tutorial#knative_setup)
+* [Install Knative in your cluster using the managed Knative add-on](https://cloud.ibm.com/docs/containers?topic=containers-knative_tutorial#knative_setup)
 
-* [Install Tekton in your cluster by following the instructions](https://github.com/tektoncd/pipeline/blob/master/docs/install.md#adding-the-tekton-pipelines)
-
+    **Note**:  The managed Knative add-on also installs Tekton.
 
 ## Estimated time
 
@@ -102,9 +103,9 @@ spec:
       command:
         - /kaniko/executor
       args:
-        - --dockerfile=${inputs.params.pathToDockerFile}
-        - --destination=${inputs.params.imageUrl}:${inputs.params.imageTag}
-        - --context=/workspace/git-source/${inputs.params.pathToContext}
+        - --dockerfile=$(inputs.params.pathToDockerFile)
+        - --destination=$(inputs.params.imageUrl):$(inputs.params.imageTag)
+        - --context=/workspace/git-source/$(inputs.params.pathToContext)
 ```
 
 A task can have one or more steps.  Each step defines an image to run to perform the function of the step.
@@ -163,15 +164,15 @@ spec:
       args:
         - "-i"
         - "-e"
-        - "s;__IMAGE__;${inputs.params.imageUrl}:${inputs.params.imageTag};g"
-        - "/workspace/git-source/${inputs.params.pathToYamlFile}"
+        - "s;__IMAGE__;$(inputs.params.imageUrl):$(inputs.params.imageTag);g"
+        - "/workspace/git-source/$(inputs.params.pathToYamlFile)"
     - name: run-kubectl
       image: lachlanevenson/k8s-kubectl
       command: ["kubectl"]
       args:
         - "apply"
         - "-f"
-        - "/workspace/git-source/${inputs.params.pathToYamlFile}"
+        - "/workspace/git-source/$(inputs.params.pathToYamlFile)"
 ```
 
 This task has two steps.
@@ -223,11 +224,11 @@ spec:
       name: source-to-image
     params:
       - name: pathToContext
-        value: "${params.pathToContext}"
+        value: "$(params.pathToContext)"
       - name: imageUrl
-        value: "${params.imageUrl}"
+        value: "$(params.imageUrl)"
       - name: imageTag
-        value: "${params.imageTag}"
+        value: "$(params.imageTag)"
     resources:
       inputs:
         - name: git-source
@@ -239,11 +240,11 @@ spec:
       - source-to-image
     params:
       - name: pathToYamlFile
-        value:  "${params.pathToYamlFile}"
+        value:  "$(params.pathToYamlFile)"
       - name: imageUrl
-        value: "${params.imageUrl}"
+        value: "$(params.imageUrl)"
       - name: imageTag
-        value: "${params.imageTag}"
+        value: "$(params.imageTag)"
     resources:
       inputs:
         - name: git-source
@@ -298,9 +299,7 @@ spec:
       value: <REGISTRY>/<NAMESPACE>/picalc
     - name: imageTag
       value: "1.0"
-  trigger:
-    type: manual
-  serviceAccount: pipeline-account
+  serviceAccountName: pipeline-account
 ```
 
 Although this file is small there is a lot going on here.  Let's break it down from top to bottom:
@@ -359,21 +358,20 @@ The last step before running the pipeline is to set up a service account so that
 The service account ties together a couple of secrets containing credentials for authentication
 along with RBAC-related resources for permission to create and modify certain Kubernetes resources.
 
-First you need to enable programmatic access to your private container registry by creating either
-a registry token or an IBM Cloud Identity and Access Management (IAM) API key.
-The process for creating a token or an API key is described [here](https://cloud.ibm.com/docs/services/Registry?topic=registry-registry_access#registry_access).
+First you need to enable programmatic access to your private container registry by creating
+an IBM Cloud Identity and Access Management (IAM) API key.
+The process for creating a user API key is described [here](https://cloud.ibm.com/docs/services/Registry?topic=registry-registry_access#registry_access).
 
-After you have the token or API key, you can create the following secret.
+After you have the API key, you can create the following secret.
 
 ```
-kubectl create secret generic ibm-cr-push-secret --type="kubernetes.io/basic-auth" --from-literal=username=<USER> --from-literal=password=<TOKEN/APIKEY>
+kubectl create secret generic ibm-cr-push-secret --type="kubernetes.io/basic-auth" --from-literal=username=iamapikey --from-literal=password=<APIKEY>
 kubectl annotate secret ibm-cr-push-secret tekton.dev/docker-0=<REGISTRY>
 ```
 
 where
 
-* `<USER>` is either `token` if you are using a token or `iamapikey` if you are using an API key
-* `<TOKEN/APIKEY>` is either the token or API key that you created
+* `<APIKEY>` is either the API key that you created
 * `<REGISTRY>` is the URL of your container registry, such as `us.icr.io` or `registry.ng.bluemix.net`
 
 Now you can create the service account using the following yaml.
