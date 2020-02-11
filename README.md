@@ -372,7 +372,7 @@ kubectl annotate secret ibm-cr-push-secret tekton.dev/docker-0=<REGISTRY>
 where
 
 * `<APIKEY>` is either the API key that you created
-* `<REGISTRY>` is the URL of your container registry, such as `us.icr.io` or `registry.ng.bluemix.net`
+* `<REGISTRY>` is the URL of your container registry, such as `us.icr.io`
 
 Now you can create the service account using the following yaml.
 You can find this yaml file at [tekton/pipeline-account.yaml](tekton/pipeline-account.yaml).
@@ -484,7 +484,7 @@ Spec:
     Name:   pathToYamlFile
     Value:  knative/picalc.yaml
     Name:   imageUrl
-    Value:  registry.ng.bluemix.net/mynamespace/picalc
+    Value:  us.icr.io/mynamespace/picalc
     Name:   imageTag
     Value:  1.3
   Pipeline Ref:
