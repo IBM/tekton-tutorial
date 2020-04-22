@@ -1,0 +1,35 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: picalc-service
+  labels:
+    app: picalc
+spec:
+  selector:
+    app: picalc
+  ports:
+  - port: 80
+    targetPort: 8080
+
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: picalc-deployment
+  labels:
+    app: picalc
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: picalc
+  template:
+    metadata:
+      labels:
+        app: picalc
+    spec:
+      containers:
+      - name: picalc
+        image: __IMAGE__
+        ports:
+        - containerPort: 8080
