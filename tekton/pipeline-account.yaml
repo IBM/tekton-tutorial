@@ -3,7 +3,7 @@ kind: ServiceAccount
 metadata:
   name: pipeline-account
 secrets:
-- name: ibm-cr-push-secret
+- name: ibm-registry-secret
 
 ---
 
@@ -22,8 +22,11 @@ apiVersion: rbac.authorization.k8s.io/v1
 metadata:
   name: pipeline-role
 rules:
-- apiGroups: ["serving.knative.dev"]
+- apiGroups: [""]
   resources: ["services"]
+  verbs: ["get", "create", "update", "patch"]
+- apiGroups: ["apps"]
+  resources: ["deployments"]
   verbs: ["get", "create", "update", "patch"]
 
 ---

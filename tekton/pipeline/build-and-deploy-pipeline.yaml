@@ -1,49 +1,63 @@
-apiVersion: tekton.dev/v1alpha1
+apiVersion: tekton.dev/v1beta1
 kind: Pipeline
 metadata:
   name: build-and-deploy-pipeline
 spec:
-  resources:
+  workspaces:
     - name: git-source
-      type: git
+      description: The git repo
   params:
+    - name: gitUrl
+      description: Git repository url
     - name: pathToContext
       description: The path to the build context, used by Kaniko - within the workspace
       default: src
     - name: pathToYamlFile
       description: The path to the yaml file to deploy within the git source
     - name: imageUrl
-      description: Url of image repository
+      description: Image name including repository
     - name: imageTag
-      description: Tag to apply to the built image
+      description: Image tag
+      default: "latest"
   tasks:
-  - name: source-to-image
-    taskRef:
-      name: source-to-image
-    params:
-      - name: pathToContext
-        value: "$(params.pathToContext)"
-      - name: imageUrl
-        value: "$(params.imageUrl)"
-      - name: imageTag
-        value: "$(params.imageTag)"
-    resources:
-      inputs:
+    - name: clone-repo
+      taskRef:
+        name: git-clone
+      workspaces:
+        - name: output
+          workspace: git-source
+      params:
+        - name: url
+          value: "$(params.gitUrl)"
+        - name: subdirectory
+          value: "."
+        - name: deleteExisting
+          value: "true"
+    - name: source-to-image
+      taskRef:
+        name: kaniko
+      runAfter:
+        - clone-repo
+      workspaces:
+        - name: source
+          workspace: git-source
+      params:
+        - name: CONTEXT
+          value: $(params.pathToContext)
+        - name: IMAGE
+          value: $(params.imageUrl):$(params.imageTag)
+    - name: deploy-to-cluster
+      taskRef:
+        name: deploy-using-kubectl
+      workspaces:
         - name: git-source
-          resource: git-source
-  - name: deploy-to-cluster
-    taskRef:
-      name: deploy-using-kubectl
-    runAfter:
-      - source-to-image
-    params:
-      - name: pathToYamlFile
-        value:  "$(params.pathToYamlFile)"
-      - name: imageUrl
-        value: "$(params.imageUrl)"
-      - name: imageTag
-        value: "$(params.imageTag)"
-    resources:
-      inputs:
-        - name: git-source
-          resource: git-source
+          workspace: git-source
+      params:
+        - name: pathToYamlFile
+          value: $(params.pathToYamlFile)
+        - name: imageUrl
+          value: $(params.imageUrl)
+        - name: imageTag
+          value: $(params.imageTag)
+        - name: imageDigest
+          value: $(tasks.source-to-image.results.IMAGE-DIGEST)

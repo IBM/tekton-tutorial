@@ -1,20 +1,21 @@
-apiVersion: tekton.dev/v1alpha1
+apiVersion: tekton.dev/v1beta1
 kind: Task
 metadata:
   name: deploy-using-kubectl
 spec:
-  inputs:
-    resources:
-      - name: git-source
-        type: git
-    params:
-      - name: pathToYamlFile
-        description: The path to the yaml file to deploy within the git source
-      - name: imageUrl
-        description: Url of image repository
-      - name: imageTag
-        description: Tag of the images to be used.
-        default: "latest"
+  workspaces:
+    - name: git-source
+      description: The git repo
+  params:
+    - name: pathToYamlFile
+      description: The path to the yaml file to deploy within the git source
+    - name: imageUrl
+      description: Image name including repository
+    - name: imageTag
+      description: Image tag
+      default: "latest"
+    - name: imageDigest
+      description: Digest of the image to be used.
   steps:
     - name: update-yaml
       image: alpine
@@ -22,12 +23,14 @@ spec:
       args:
         - "-i"
         - "-e"
-        - "s;__IMAGE__;$(inputs.params.imageUrl):$(inputs.params.imageTag);g"
-        - "/workspace/git-source/$(inputs.params.pathToYamlFile)"
+        - "s;__IMAGE__;$(params.imageUrl):$(params.imageTag);g"
+        - "-e"
+        - "s;__DIGEST__;$(params.imageDigest);g"
+        - "$(workspaces.git-source.path)/$(params.pathToYamlFile)"
     - name: run-kubectl
       image: lachlanevenson/k8s-kubectl
       command: ["kubectl"]
       args:
         - "apply"
         - "-f"
-        - "/workspace/git-source/$(inputs.params.pathToYamlFile)"
+        - "$(workspaces.git-source.path)/$(params.pathToYamlFile)"
