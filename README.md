@@ -72,9 +72,11 @@ Let's create a simple pipeline that
 ### 2. Clone the repository
 
 You should clone this project to your workstation since you will need to edit some of the yaml files before applying them to your cluster.
+Check out the `beta-update` branch after cloning.
 
 ```
 git clone https://github.com/IBM/tekton-tutorial
+git checkout beta-update
 ```
 
 We will work from the bottom-up, i.e. first we will define the Task resources needed to build and deploy the image,
