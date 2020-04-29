@@ -1,5 +1,7 @@
 ## Knative Deployment using Tekton Pipelines
 
+> **_NOTE:_**  This content applies to the Tekton alpha release.  Please [switch to the beta-update branch](https://github.com/IBM/tekton-tutorial/tree/beta-update) for content about the Tekton beta release.
+
 Tekton is an open source project to configure and run CI/CD pipelines within a Kubernetes cluster.
 
 
