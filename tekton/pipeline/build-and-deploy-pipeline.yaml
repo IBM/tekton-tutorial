@@ -9,6 +9,9 @@ spec:
   params:
     - name: gitUrl
       description: Git repository url
+    - name: gitRevision
+      description: Git revision to check out
+      default: master
     - name: pathToContext
       description: The path to the build context, used by Kaniko - within the workspace
       default: src
@@ -29,6 +32,8 @@ spec:
       params:
         - name: url
           value: "$(params.gitUrl)"
+        - name: revision
+          value: "$(params.gitRevision)"
         - name: subdirectory
           value: "."
         - name: deleteExisting

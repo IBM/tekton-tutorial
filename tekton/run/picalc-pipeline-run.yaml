@@ -8,6 +8,8 @@ spec:
   params:
     - name: gitUrl
       value: https://github.com/IBM/tekton-tutorial.git
+    - name: gitRevision
+      value: beta-update
     - name: pathToYamlFile
       value: "kubernetes/picalc.yaml"
     - name: imageUrl
