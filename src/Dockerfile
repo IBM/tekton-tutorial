@@ -5,7 +5,8 @@ FROM golang:1.12 as builder
 
 # Copy local code to the container image.
 WORKDIR /go/src/github.com/IBM/tekton-tutorial
-COPY picalc.go picalc_test.go .
+COPY picalc.go .
+COPY picalc_test.go .
 
 # Run unit tests
 RUN CGO_ENABLED=0 GOOS=linux go test
