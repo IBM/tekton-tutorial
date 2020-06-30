@@ -283,7 +283,7 @@ This will be covered later on in the tutorial.
 Apply the file to your cluster to create the task.
 
 ```
-https://raw.githubusercontent.com/tektoncd/catalog/v1beta1/kaniko/kaniko.yaml
+kubectl apply -f https://raw.githubusercontent.com/tektoncd/catalog/v1beta1/kaniko/kaniko.yaml
 ```
 
 
@@ -803,7 +803,3 @@ to run the pipeline tasks.
 Tekton provides simple, easy-to-learn features for constructing CI/CD pipelines that run on Kubernetes.
 This tutorial covered the basics to get you started building your own pipelines.
 There are more features available and many more planned for upcoming releases.
-
-
-
-
