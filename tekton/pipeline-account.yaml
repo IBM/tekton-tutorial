@@ -3,7 +3,7 @@ kind: ServiceAccount
 metadata:
   name: pipeline-account
 secrets:
-- name: ibm-registry-secret
+- name: az-registry-secret
 
 ---
 

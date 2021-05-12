@@ -7,13 +7,13 @@ spec:
     name: build-and-deploy-pipeline
   params:
     - name: gitUrl
-      value: https://github.com/IBM/tekton-tutorial.git
+      value: https://github.com/AdriaMTP/tekton-tutorial.git
     - name: gitRevision
       value: beta-update
     - name: pathToYamlFile
       value: "kubernetes/picalc.yaml"
     - name: imageUrl
-      value: <REGISTRY>/<NAMESPACE>/picalc
+      value: iacontainerregistry.azurecr.io/picalc
     - name: imageTag
       value: "1.0"
   serviceAccountName: pipeline-account
