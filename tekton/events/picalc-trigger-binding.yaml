@@ -1,0 +1,16 @@
+apiVersion: triggers.tekton.dev/v1alpha1
+kind: TriggerBinding
+metadata:
+  name: picalc-trigger-binding
+spec:
+  params:
+  - name: GITURL
+    value: https://github.com/AdriaMTP/tekton-tutorial.git
+  - name: GITREVISION
+    value: beta-update
+  - name: PATHTOYAMLFILE
+    value: "kubernetes/picalc.yaml"
+  - name: IMAGEURL
+    value: iacontainerregistry.azurecr.io/picalc
+  - name: IMAGETAG
+    value: "1.0"

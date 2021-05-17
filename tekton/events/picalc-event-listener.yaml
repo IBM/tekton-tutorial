@@ -1,0 +1,21 @@
+apiVersion: triggers.tekton.dev/v1alpha1
+kind: EventListener
+metadata:
+  name: picalc-event-listener
+spec:
+  serviceAccountName: trigger-account
+  triggers:
+    - name: github-listener
+      interceptors:
+        - ref:
+            name: "github"
+            kind: ClusterInterceptor
+            apiVersion: triggers.tekton.dev
+          params:
+          - name: "eventTypes"
+            value: ["pull_request"]
+      bindings:
+        - ref: picalc-trigger-binding
+          kind: TriggerBinding
+      template:
+        ref: picalc-trigger-template

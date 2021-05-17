@@ -15,7 +15,7 @@ spec:
     spec:
       containers:
       - name: picalc
-        image: __IMAGE__@__DIGEST__
+        image: __IMAGE__
         ports:
         - name: http-server
           containerPort: 8080

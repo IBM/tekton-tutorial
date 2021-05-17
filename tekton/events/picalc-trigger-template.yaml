@@ -1,0 +1,45 @@
+apiVersion: triggers.tekton.dev/v1alpha1
+kind: TriggerTemplate
+metadata:
+  name: picalc-trigger-template
+spec:
+  params:
+    - name: GITURL
+      description: Git repository url
+    - name: GITREVISION
+      description: Git revision to check out
+      default: master
+    - name: PATHTOCONTEXT
+      description: The path to the build context, used by Kaniko - within the workspace
+      default: src
+    - name: PATHTOYAMLFILE
+      description: The path to the yaml file to deploy within the git source
+    - name: IMAGEURL
+      description: Image name including repository
+    - name: IMAGETAG
+      description: Image tag
+      default: "latest"
+  resourcetemplates:
+  - apiVersion: tekton.dev/v1beta1
+    kind: PipelineRun
+    metadata:
+      generateName: picalc-pr-
+    spec:
+      pipelineRef:
+        name: build-and-deploy-pipeline
+      params:
+        - name: gitUrl
+          value: $(tt.params.GITURL)
+        - name: gitRevision
+          value: $(tt.params.GITREVISION)
+        - name: pathToYamlFile
+          value: $(tt.params.PATHTOYAMLFILE)
+        - name: imageUrl
+          value: $(tt.params.IMAGEURL)
+        - name: imageTag
+          value: $(tt.params.IMAGETAG)
+      serviceAccountName: pipeline-account
+      workspaces:
+        - name: git-source
+          persistentVolumeClaim:
+            claimName: picalc-source-pvc
