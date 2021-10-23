@@ -510,26 +510,26 @@ Creating service ID user1-tekton101-serviceid bound to current account as user1@
 OK
 Service ID user1-tekton101-serviceid is created successfully
                  
-ID            ServiceId-b776f0dc-34fc-4f77-bee6-f586adf09e08   
+ID            ServiceId-a123b4cd-56ef-7g89-hij0-k123lkm45n67   
 Name          user1-tekton101-serviceid   
 Description      
-CRN           crn:v1:bluemix:public:iam-identity::a/e65910fa61ce9072d64902d03f3d4774::serviceid:ServiceId-b776f0dc-34fc-4f77-bee6-f586adf09e08   
+CRN           crn:v1:bluemix:public:iam-identity::a/abc123def456::serviceid:ServiceId-a123b4cd-56ef-7g89-hij0-k123lkm45n67    
 Version       1-11c9ab5605ade2507e73c2b143747988   
 Locked        false
 
 $ ibmcloud iam service-api-key-create $SERVICE_ID_APIKEY_NAME $SERVICE_ID_NAME
 
-Creating API key user1-apikey of service ID user1-tekton101-serviceid under account e65910fa61ce9072d64902d03f3d4774 as user1@email.com...
+Creating API key user1-apikey of service ID user1-tekton101-serviceid under account abc123def456 as user1@email.com...
 OK
 Service ID API key user1-apikey is created
 
 Please preserve the API key! It cannot be retrieved after it's created.
                  
-ID            ApiKey-f3660c3b-4485-41f0-9a3e-bf9d2930711a   
+ID            ApiKey-a1234b5c-6789-01d2-3e4f-gh5d2930711a   
 Name          user1-apikey   
 Description      
 Created At    2021-10-22T23:30+0000   
-API Key       pvybgw33ykz4NzTdbLKDi2SoENzdeag7_HX_73oPWMhK   
+API Key       a1234b5c-6789-01d2-3e4f-gh5d2930711a    
 Locked        false   
 ```
 
