@@ -501,17 +501,17 @@ If you use the IBM Container Registry, you first need create an IBM Cloud API ke
 If you do not have an IBM Cloud API Key yet, create one as follows,
 
 ```bash
-$ export SERVICE_ID_NAME=<remkohdev-tekton101-serviceid>
-$ export SERVICE_ID_APIKEY_NAME=<remkohdev-apikey>
+$ export SERVICE_ID_NAME=<user1-tekton101-serviceid>
+$ export SERVICE_ID_APIKEY_NAME=<user1-apikey>
 
 $ ibmcloud iam service-id-create $SERVICE_ID_NAME
 
-Creating service ID remkohdev-tekton101-serviceid bound to current account as remkohdev@us.ibm.com...
+Creating service ID user1-tekton101-serviceid bound to current account as user1@email.com...
 OK
-Service ID remkohdev-tekton101-serviceid is created successfully
+Service ID user1-tekton101-serviceid is created successfully
                  
 ID            ServiceId-b776f0dc-34fc-4f77-bee6-f586adf09e08   
-Name          remkohdev-tekton101-serviceid   
+Name          user1-tekton101-serviceid   
 Description      
 CRN           crn:v1:bluemix:public:iam-identity::a/e65910fa61ce9072d64902d03f3d4774::serviceid:ServiceId-b776f0dc-34fc-4f77-bee6-f586adf09e08   
 Version       1-11c9ab5605ade2507e73c2b143747988   
@@ -519,14 +519,14 @@ Locked        false
 
 $ ibmcloud iam service-api-key-create $SERVICE_ID_APIKEY_NAME $SERVICE_ID_NAME
 
-Creating API key remkohdev-apikey of service ID remkohdev-tekton101-serviceid under account e65910fa61ce9072d64902d03f3d4774 as remkohdev@us.ibm.com...
+Creating API key user1-apikey of service ID user1-tekton101-serviceid under account e65910fa61ce9072d64902d03f3d4774 as user1@email.com...
 OK
-Service ID API key remkohdev-apikey is created
+Service ID API key user1-apikey is created
 
 Please preserve the API key! It cannot be retrieved after it's created.
                  
 ID            ApiKey-f3660c3b-4485-41f0-9a3e-bf9d2930711a   
-Name          remkohdev-apikey   
+Name          user1-apikey   
 Description      
 Created At    2021-10-22T23:30+0000   
 API Key       pvybgw33ykz4NzTdbLKDi2SoENzdeag7_HX_73oPWMhK   
