@@ -1,7 +1,8 @@
-apiVersion: tekton.dev/v1alpha1
+apiVersion: tekton.dev/v1beta1
 kind: PipelineResource
 metadata:
   name: picalc-git
+  namespace: pipelines-tutorial
 spec:
   type: git
   params:
